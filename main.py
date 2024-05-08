@@ -67,7 +67,7 @@ if __name__ == "__main__":
     asyncio.set_event_loop(loop)
 
     # Schedule the job to run every day at 18:00 (6:00 PM)
-    crontab('03 18 * * *', func=scheduled_job)
+    crontab('0 12 * * *', func=scheduled_job)
 
     # Run the event loop
     try:
