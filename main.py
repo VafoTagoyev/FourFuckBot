@@ -46,7 +46,7 @@ async def scheduled_job():
 
 if __name__ == "__main__":
     # Schedule the job to run every day at 12 pm
-    crontab('33 14 * * *', func=scheduled_job)
+    crontab('00 15 * * *', func=scheduled_job)
 
     # Create and run the event loop explicitly
     loop = asyncio.get_event_loop()
