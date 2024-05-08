@@ -6,18 +6,35 @@ from telegram import Bot
 # Bot token obtained from BotFather
 BOT_TOKEN = '7078577433:AAHJ-o28uqp4wFL_lcjqjdrGtA47rUJP2Uo'
 
+# Path to the file storing the last cook index
+LAST_COOK_INDEX_FILE = 'last_cook_index.txt'
+
 # List of your group members
 GROUP_MEMBERS = ['Vova', 'Avazchik', 'Shoki', 'Bobka']
 
-# Variable to keep track of the last person who cooked
-last_cook_index = -1
+
+def read_last_cook_index():
+    try:
+        with open(LAST_COOK_INDEX_FILE, 'r') as file:
+            return int(file.read().strip())
+    except FileNotFoundError:
+        # If the file doesn't exist, return -1 as default index
+        return -1
+
+
+def write_last_cook_index(index):
+    with open(LAST_COOK_INDEX_FILE, 'w') as file:
+        file.write(str(index))
 
 
 def choose_cook_of_the_day():
-    global last_cook_index
+    last_cook_index = read_last_cook_index()
 
     # Increment the last cook index to move to the next person
     last_cook_index = (last_cook_index + 1) % len(GROUP_MEMBERS)
+
+    # Save the updated index
+    write_last_cook_index(last_cook_index)
 
     return GROUP_MEMBERS[last_cook_index]
 
@@ -50,7 +67,7 @@ if __name__ == "__main__":
     asyncio.set_event_loop(loop)
 
     # Schedule the job to run every day at 18:00 (6:00 PM)
-    crontab('0 16 * * *', func=scheduled_job)
+    crontab('03 18 * * *', func=scheduled_job)
 
     # Run the event loop
     try:
