@@ -43,13 +43,17 @@ async def scheduled_job():
     # Send the notification to your group
     await send_notification(BOT_TOKEN, -1002029758960, message)
 
-    # Get the next crontab event time
-    next_event = await crontab('46 14 * * *', func=scheduled_job).next()
-
-    # Sleep until the next crontab event
-    await asyncio.sleep(next_event.total_seconds())
-
 
 if __name__ == "__main__":
-    # Run the scheduled job
-    asyncio.run(scheduled_job())
+    # Create and run the event loop explicitly
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    # Schedule the job to run every day at 18:00 (6:00 PM)
+    crontab('0 16 * * *', func=scheduled_job)
+
+    # Run the event loop
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()
