@@ -22,7 +22,8 @@ current_chat_id = None
 def read_last_cook_index():
     try:
         with open(LAST_COOK_INDEX_FILE, 'r') as file:
-            return int(file.read().strip())
+            content = file.read().strip()
+            return int(content) if content else -1
     except FileNotFoundError:
         return -1
 
